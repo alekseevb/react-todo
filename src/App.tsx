@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Box, Container, GlobalStyle } from './styles/GlobalStyle'
-import AddTodo from './components/AddTodo/AddTodo'
-import TodoItem from './components/TodoItem/TodoItem'
+import AddTodo from './components/AddTodo/AddTodo.tsx'
+import TodoItem from './components/TodoItem/TodoItem.tsx'
 
 interface Todo {
 	id: number
