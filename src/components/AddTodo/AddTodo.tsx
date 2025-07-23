@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Plus } from 'lucide-react'
+import { Wrapper } from './AddTodo'
 
 interface ComponentNameProps {
 	inputValue: string
@@ -14,11 +15,11 @@ export default function AddTodo({
 	onAddTodo,
 }: ComponentNameProps) {
 	return (
-		<div>
+		<Wrapper>
 			<Input type='text' value={inputValue} onChange={onInputChange} />
 			<Button size='icon' onClick={onAddTodo}>
 				<Plus />
 			</Button>
-		</div>
+		</Wrapper>
 	)
 }

@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { Button } from './components/ui/button'
-import { Input } from './components/ui/input'
-import { Plus } from 'lucide-react'
-import { GlobalStyle } from './styles/GlobalStyle'
+import { Box, Container, GlobalStyle } from './styles/GlobalStyle'
 import AddTodo from './components/AddTodo/AddTodo'
+import TodoItem from './components/TodoItem/TodoItem'
 
 interface Todo {
 	id: number
@@ -35,14 +33,16 @@ function App() {
 	return (
 		<>
 			<GlobalStyle />
-			<AddTodo
-				inputValue={inputValue}
-				onInputChange={handleInputChange}
-				onAddTodo={handleAddTodoBtnClick}
-			/>
-			{todos.map(todo => (
-				<p>{todo.text}</p>
-			))}
+			<Container>
+				<Box>
+					<AddTodo
+						inputValue={inputValue}
+						onInputChange={handleInputChange}
+						onAddTodo={handleAddTodoBtnClick}
+					/>
+					<TodoItem todos={todos}></TodoItem>
+				</Box>
+			</Container>
 		</>
 	)
 }
