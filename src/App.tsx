@@ -55,9 +55,12 @@ function App() {
 	}
 
 	const handleEditTodo = (id: number, newText: string) => {
-		setTodos(prev =>
-			prev.map(todo => (todo.id === id ? { ...todo, text: newText } : todo))
+		const updateTodos = todos.map(todo =>
+			todo.id === id ? { ...todo, text: newText } : todo
 		)
+		setTodos(updateTodos)
+
+		setTodoToLocalStorage(updateTodos)
 	}
 
 	return (
