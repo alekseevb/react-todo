@@ -3,6 +3,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import './TodoItem.css'
+import { DialogDemo } from './TodoItemDialog'
 
 interface Todo {
 	id: number
@@ -15,12 +16,14 @@ interface ComponentNameProps {
 	todos: Todo[]
 	removeTask: (number: number) => void
 	toggleTask: (number: number) => void
+	editTodo: (id: number, text: string) => void
 }
 
 export default function TodoItem({
 	todos,
 	removeTask,
 	toggleTask,
+	editTodo,
 }: ComponentNameProps) {
 	return (
 		<div className='flex flex-col gap-2'>
@@ -36,9 +39,7 @@ export default function TodoItem({
 					</div>
 
 					<div className='flex gap-2'>
-						<Button variant='outline'>
-							<Pencil />
-						</Button>
+						<DialogDemo todo={todo} editTodo={editTodo} />
 						<Button variant='outline' onClick={() => removeTask(todo.id)}>
 							<Trash2 />
 						</Button>

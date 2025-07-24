@@ -36,6 +36,12 @@ function App() {
 		])
 	}
 
+	const handleEditTodo = (id: number, newText: string) => {
+		setTodos(prev =>
+			prev.map(todo => (todo.id === id ? { ...todo, text: newText } : todo))
+		)
+	}
+
 	console.log(todos)
 
 	return (
@@ -48,6 +54,7 @@ function App() {
 						todos={todos}
 						removeTask={handleRemoveTodoBtnClick}
 						toggleTask={handleToggleTodo}
+						editTodo={handleEditTodo}
 					/>
 				</Box>
 			</Container>
