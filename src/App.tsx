@@ -24,7 +24,9 @@ function App() {
 		setTodos([...todos, newTodo])
 	}
 
-	const handleRemoveTodoBtnClick = () => {}
+	const handleRemoveTodoBtnClick = (id: number) => {
+		setTodos([...todos.filter(todo => todo.id !== id)])
+	}
 
 	const handleToggleTodo = () => {}
 
@@ -34,7 +36,9 @@ function App() {
 			<Container>
 				<Box>
 					<AddTodo addTodo={addTodo} />
-					<TodoItem todos={todos}></TodoItem>
+					<TodoItem
+						todos={todos}
+						removeTask={handleRemoveTodoBtnClick}></TodoItem>
 				</Box>
 			</Container>
 		</>

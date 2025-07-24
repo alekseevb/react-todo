@@ -12,9 +12,10 @@ interface Todo {
 
 interface ComponentNameProps {
 	todos: Todo[]
+	removeTask: (number: number) => void
 }
 
-export default function TodoItem({ todos }: ComponentNameProps) {
+export default function TodoItem({ todos, removeTask }: ComponentNameProps) {
 	return (
 		<div className='flex flex-col gap-2'>
 			{todos.map(todo => (
@@ -28,7 +29,7 @@ export default function TodoItem({ todos }: ComponentNameProps) {
 						<Button variant='outline'>
 							<Pencil />
 						</Button>
-						<Button variant='outline'>
+						<Button variant='outline' onClick={() => removeTask(todo.id)}>
 							<Trash2 />
 						</Button>
 					</div>
