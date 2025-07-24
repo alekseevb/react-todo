@@ -28,7 +28,15 @@ function App() {
 		setTodos([...todos.filter(todo => todo.id !== id)])
 	}
 
-	const handleToggleTodo = () => {}
+	const handleToggleTodo = (id: number) => {
+		setTodos([
+			...todos.map(todo =>
+				todo.id === id ? { ...todo, completed: !todo.completed } : { ...todo }
+			),
+		])
+	}
+
+	console.log(todos)
 
 	return (
 		<>
@@ -38,7 +46,9 @@ function App() {
 					<AddTodo addTodo={addTodo} />
 					<TodoItem
 						todos={todos}
-						removeTask={handleRemoveTodoBtnClick}></TodoItem>
+						removeTask={handleRemoveTodoBtnClick}
+						toggleTask={handleToggleTodo}
+					/>
 				</Box>
 			</Container>
 		</>
