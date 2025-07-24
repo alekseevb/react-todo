@@ -32,6 +32,9 @@ function App() {
 			createdAt: new Date(),
 		}
 
+		if (!inputValue) {
+		}
+
 		const updateTodos = [...todos, newTodo]
 
 		setTodos(updateTodos)

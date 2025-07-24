@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus } from 'lucide-react'
+import { Angry, Plus } from 'lucide-react'
 import { Wrapper } from './AddTodo'
 import { useState } from 'react'
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 
 interface ComponentNameProps {
 	addTodo: (text: string) => void
@@ -10,13 +11,21 @@ interface ComponentNameProps {
 
 export default function AddTodo({ addTodo }: ComponentNameProps) {
 	const [inputValue, setInput] = useState('')
+	const [error, setError] = useState(false)
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setInput(event.target.value)
+		if (error) {
+			setError(false)
+		}
 	}
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
+		if (inputValue.trim() === '') {
+			setError(true)
+			return
+		}
 		addTodo(inputValue)
 		setInput('')
 	}
@@ -29,6 +38,15 @@ export default function AddTodo({ addTodo }: ComponentNameProps) {
 					<Plus />
 				</Button>
 			</Wrapper>
+			{error && (
+				<Alert variant='destructive'>
+					<Angry />
+					<AlertTitle>
+						<strong>Руки вверх</strong>
+					</AlertTitle>
+					<AlertDescription>Поле не может быть пустым</AlertDescription>
+				</Alert>
+			)}
 		</form>
 	)
 }
