@@ -1,7 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Container, GlobalStyle } from './styles/GlobalStyle'
 import AddTodo from './components/AddTodo/AddTodo.tsx'
 import TodoItem from './components/TodoItem/TodoItem.tsx'
+import {
+	getTodoFromLocalStorage,
+	setTodoToLocalStorage,
+} from './utils/localStorage.ts'
 
 interface Todo {
 	id: number
@@ -13,6 +17,13 @@ interface Todo {
 function App() {
 	const [todos, setTodos] = useState<Todo[]>([])
 
+	useEffect(() => {
+		const localTodos = getTodoFromLocalStorage()
+		if (localTodos) {
+			setTodos(JSON.parse(localTodos))
+		}
+	}, [])
+
 	const addTodo = (inputValue: string) => {
 		const newTodo: Todo = {
 			id: Date.now(),
@@ -21,11 +32,18 @@ function App() {
 			createdAt: new Date(),
 		}
 
-		setTodos([...todos, newTodo])
+		const updateTodos = [...todos, newTodo]
+
+		setTodos(updateTodos)
+
+		setTodoToLocalStorage(updateTodos)
 	}
 
 	const handleRemoveTodoBtnClick = (id: number) => {
-		setTodos([...todos.filter(todo => todo.id !== id)])
+		const updateTodos = todos.filter(todo => todo.id !== id)
+		setTodos(updateTodos)
+
+		setTodoToLocalStorage(updateTodos)
 	}
 
 	const handleToggleTodo = (id: number) => {
@@ -41,8 +59,6 @@ function App() {
 			prev.map(todo => (todo.id === id ? { ...todo, text: newText } : todo))
 		)
 	}
-
-	console.log(todos)
 
 	return (
 		<>
