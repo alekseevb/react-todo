@@ -12,13 +12,8 @@ interface Todo {
 
 function App() {
 	const [todos, setTodos] = useState<Todo[]>([])
-	const [inputValue, setInput] = useState('')
 
-	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setInput(event.target.value)
-	}
-
-	const handleAddTodoBtnClick = () => {
+	const addTodo = (inputValue: string) => {
 		const newTodo: Todo = {
 			id: Date.now(),
 			text: inputValue,
@@ -27,19 +22,18 @@ function App() {
 		}
 
 		setTodos([...todos, newTodo])
-		setInput('')
 	}
+
+	const handleRemoveTodoBtnClick = () => {}
+
+	const handleToggleTodo = () => {}
 
 	return (
 		<>
 			<GlobalStyle />
 			<Container>
 				<Box>
-					<AddTodo
-						inputValue={inputValue}
-						onInputChange={handleInputChange}
-						onAddTodo={handleAddTodoBtnClick}
-					/>
+					<AddTodo addTodo={addTodo} />
 					<TodoItem todos={todos}></TodoItem>
 				</Box>
 			</Container>

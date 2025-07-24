@@ -2,24 +2,33 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Plus } from 'lucide-react'
 import { Wrapper } from './AddTodo'
+import { useState } from 'react'
 
 interface ComponentNameProps {
-	inputValue: string
-	onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-	onAddTodo: () => void
+	addTodo: (text: string) => void
 }
 
-export default function AddTodo({
-	inputValue,
-	onInputChange,
-	onAddTodo,
-}: ComponentNameProps) {
+export default function AddTodo({ addTodo }: ComponentNameProps) {
+	const [inputValue, setInput] = useState('')
+
+	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setInput(event.target.value)
+	}
+
+	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault()
+		addTodo(inputValue)
+		setInput('')
+	}
+
 	return (
-		<Wrapper>
-			<Input type='text' value={inputValue} onChange={onInputChange} />
-			<Button size='icon' onClick={onAddTodo}>
-				<Plus />
-			</Button>
-		</Wrapper>
+		<form onSubmit={handleSubmit}>
+			<Wrapper>
+				<Input type='text' value={inputValue} onChange={handleInputChange} />
+				<Button size='icon'>
+					<Plus />
+				</Button>
+			</Wrapper>
+		</form>
 	)
 }
