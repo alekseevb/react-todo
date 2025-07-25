@@ -42,7 +42,7 @@ export function DialogDemo({ editTodo, todo }: DialogDemoProps) {
 		<Dialog>
 			<form>
 				<DialogTrigger asChild>
-					<Button variant='outline'>
+					<Button>
 						<Pencil />
 					</Button>
 				</DialogTrigger>

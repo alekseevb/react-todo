@@ -6,6 +6,7 @@ import {
 	getTodoFromLocalStorage,
 	setTodoToLocalStorage,
 } from './utils/localStorage.ts'
+import { ThemeProvider } from './components/Theme-provider/Theme-provider.tsx'
 
 interface Todo {
 	id: number
@@ -67,7 +68,7 @@ function App() {
 	}
 
 	return (
-		<>
+		<ThemeProvider>
 			<GlobalStyle />
 			<Container>
 				<Box>
@@ -80,7 +81,7 @@ function App() {
 					/>
 				</Box>
 			</Container>
-		</>
+		</ThemeProvider>
 	)
 }
 

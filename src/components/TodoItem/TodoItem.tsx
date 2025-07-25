@@ -33,14 +33,14 @@ export default function TodoItem({
 						<Checkbox id={`${todo.id}`} onClick={() => toggleTask(todo.id)} />
 						<Label
 							htmlFor={`${todo.id}`}
-							className={todo.completed ? 'complete' : ''}>
+							className={`${todo.completed ? 'complete' : ''} `}>
 							{todo.text}
 						</Label>
 					</div>
 
-					<div className='flex gap-2'>
+					<div className='flex gap-1'>
 						<DialogDemo todo={todo} editTodo={editTodo} />
-						<Button variant='outline' onClick={() => removeTask(todo.id)}>
+						<Button onClick={() => removeTask(todo.id)}>
 							<Trash2 />
 						</Button>
 					</div>

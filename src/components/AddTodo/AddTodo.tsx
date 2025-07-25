@@ -4,6 +4,7 @@ import { Angry, Plus } from 'lucide-react'
 import { Wrapper } from './AddTodo'
 import { useState } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
+import { ModeToggle } from '../Mode-toggle.tsx/mode-toggle'
 
 interface ComponentNameProps {
 	addTodo: (text: string) => void
@@ -32,14 +33,15 @@ export default function AddTodo({ addTodo }: ComponentNameProps) {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<Wrapper>
+			<Wrapper className='flex gap-1'>
 				<Input type='text' value={inputValue} onChange={handleInputChange} />
 				<Button size='icon'>
 					<Plus />
 				</Button>
+				<ModeToggle />
 			</Wrapper>
 			{error && (
-				<Alert variant='destructive'>
+				<Alert variant='destructive' className='mb-2'>
 					<Angry />
 					<AlertTitle>
 						<strong>Руки вверх</strong>
