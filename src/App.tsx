@@ -7,6 +7,7 @@ import {
 	setTodoToLocalStorage,
 } from './utils/localStorage.ts'
 import { ThemeProvider } from './components/Theme-provider/Theme-provider.tsx'
+import { deleteTodo, fetchTodos, postTodo, updateTodo } from './api/todos.ts'
 
 interface Todo {
 	id: number
@@ -19,54 +20,71 @@ function App() {
 	const [todos, setTodos] = useState<Todo[]>([])
 
 	useEffect(() => {
-		const localTodos = getTodoFromLocalStorage()
-		if (localTodos) {
-			setTodos(JSON.parse(localTodos))
+		const loadTodos = async () => {
+			try {
+				const serverTodos: Todo[] = await fetchTodos(1, 10) // page=1, limit=10
+				setTodos(serverTodos)
+				setTodoToLocalStorage(serverTodos)
+			} catch (error) {
+				console.error('Ошибка загрузки с сервера:', error)
+				// Фолбэк на localStorage
+				const localTodos = getTodoFromLocalStorage()
+				if (localTodos) {
+					setTodos(JSON.parse(localTodos))
+				}
+			}
 		}
+		loadTodos()
 	}, [])
 
-	const addTodo = (inputValue: string) => {
-		const newTodo: Todo = {
-			id: Date.now(),
-			text: inputValue,
-			completed: false,
-			createdAt: new Date(),
+	const addTodo = async (inputValue: string): Promise<void> => {
+		if (!inputValue.trim()) return
+		try {
+			const newTodo = await postTodo(inputValue)
+			const updatedTodos = [...todos, newTodo]
+			setTodos(updatedTodos)
+			setTodoToLocalStorage(updatedTodos)
+		} catch (error) {
+			console.error('Ошибка добавления задачи:', error)
 		}
+	}
 
-		if (!inputValue) {
+	const handleRemoveTodoBtnClick = async (id: number): Promise<void> => {
+		try {
+			await deleteTodo(id)
+			const updatedTodos = todos.filter(todo => todo.id !== id)
+			setTodos(updatedTodos)
+			setTodoToLocalStorage(updatedTodos)
+		} catch (error) {
+			console.error('Ошибка удаления задачи:', error)
 		}
-
-		const updateTodos = [...todos, newTodo]
-
-		setTodos(updateTodos)
-
-		setTodoToLocalStorage(updateTodos)
 	}
 
-	const handleRemoveTodoBtnClick = (id: number) => {
-		const updateTodos = todos.filter(todo => todo.id !== id)
-		setTodos(updateTodos)
-
-		setTodoToLocalStorage(updateTodos)
+	const handleToggleTodo = async (id: number): Promise<void> => {
+		const todo = todos.find(t => t.id === id)
+		if (!todo) return
+		try {
+			const updated = await updateTodo(id, { completed: !todo.completed })
+			const updatedTodos = todos.map(t => (t.id === id ? updated : t))
+			setTodos(updatedTodos)
+			setTodoToLocalStorage(updatedTodos)
+		} catch (error) {
+			console.error('Ошибка изменения статуса:', error)
+		}
 	}
 
-	const handleToggleTodo = (id: number) => {
-		setTodos([
-			...todos.map(todo =>
-				todo.id === id ? { ...todo, completed: !todo.completed } : { ...todo }
-			),
-		])
+	const handleEditTodo = async (id: number, newText: string): Promise<void> => {
+		try {
+			const updated = await updateTodo(id, { text: newText })
+			const updatedTodos = todos.map(t => (t.id === id ? updated : t))
+			setTodos(updatedTodos)
+			setTodoToLocalStorage(updatedTodos)
+		} catch (error) {
+			console.error('Ошибка редактирования задачи:', error)
+		}
 	}
 
-	const handleEditTodo = (id: number, newText: string) => {
-		const updateTodos = todos.map(todo =>
-			todo.id === id ? { ...todo, text: newText } : todo
-		)
-		setTodos(updateTodos)
-
-		setTodoToLocalStorage(updateTodos)
-	}
-
+	console.log(JSON.stringify(todos, null, 2))
 	return (
 		<ThemeProvider>
 			<GlobalStyle />

@@ -6,7 +6,8 @@ export const fetchTodos = async (page: number, limit: number) => {
 	const response = await axios.get(
 		`${API_URL}/todos?page=${page}&limit=${limit}`
 	)
-	return response.data
+	console.log(response.data)
+	return response.data.data
 }
 
 export const postTodo = async (text: string) => {
