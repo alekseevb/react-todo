@@ -8,6 +8,8 @@ import {
 } from './utils/localStorage.ts'
 import { ThemeProvider } from './components/Theme-provider/Theme-provider.tsx'
 import { deleteTodo, fetchTodos, postTodo, updateTodo } from './api/todos.ts'
+import { PaginationDemo } from './components/Pagination/PaginationDemo.tsx'
+import SelectOption from './components/Select/Select.tsx'
 
 interface Todo {
 	id: number
@@ -18,13 +20,19 @@ interface Todo {
 
 function App() {
 	const [todos, setTodos] = useState<Todo[]>([])
+	const [page, setPage] = useState(1)
+	const [limit, setLimit] = useState(5)
+	const [totalPages, setTotalPages] = useState(1)
 
 	useEffect(() => {
 		const loadTodos = async () => {
 			try {
-				const serverTodos: Todo[] = await fetchTodos(1, 10) // page=1, limit=10
-				setTodos(serverTodos)
-				setTodoToLocalStorage(serverTodos)
+				//  получаем весь объект с сервера
+				const serverResponse = await fetchTodos(page, limit)
+				//  берём только массив задач
+				setTodos(serverResponse.data)
+				setTotalPages(serverResponse.totalPages)
+				setTodoToLocalStorage(serverResponse.data)
 			} catch (error) {
 				console.error('Ошибка загрузки с сервера:', error)
 				// Фолбэк на localStorage
@@ -35,7 +43,7 @@ function App() {
 			}
 		}
 		loadTodos()
-	}, [])
+	}, [page, limit])
 
 	const addTodo = async (inputValue: string): Promise<void> => {
 		if (!inputValue.trim()) return
@@ -91,11 +99,17 @@ function App() {
 			<Container>
 				<Box>
 					<AddTodo addTodo={addTodo} />
+					<SelectOption value={limit} onChange={setLimit} />
 					<TodoItem
 						todos={todos}
 						removeTask={handleRemoveTodoBtnClick}
 						toggleTask={handleToggleTodo}
 						editTodo={handleEditTodo}
+					/>
+					<PaginationDemo
+						page={page}
+						totalPages={totalPages}
+						onChangePage={setPage}
 					/>
 				</Box>
 			</Container>
