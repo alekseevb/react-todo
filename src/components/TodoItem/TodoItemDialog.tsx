@@ -13,13 +13,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Pencil } from 'lucide-react'
 import { useState } from 'react'
+import { type Todo } from '@/types/todo'
 
-interface Todo {
-	id: number
-	text: string
-	completed: boolean
-	createdAt: Date
-}
+// interface Todo {
+// 	id: number
+// 	text: string
+// 	completed: boolean
+// 	createdAt: Date
+// }
 
 interface DialogDemoProps {
 	todo: Todo

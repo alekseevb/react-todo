@@ -4,13 +4,14 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import './TodoItem.css'
 import { DialogDemo } from './TodoItemDialog'
+import type { Todo } from '../../types/todo'
 
-interface Todo {
-	id: number
-	text: string
-	completed: boolean
-	createdAt: Date
-}
+// interface Todo {
+// 	id: number
+// 	text: string
+// 	completed: boolean
+// 	createdAt: Date
+// }
 
 interface ComponentNameProps {
 	todos: Todo[]
