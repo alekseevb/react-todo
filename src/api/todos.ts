@@ -6,7 +6,7 @@ export interface Todo {
 	id: number
 	text: string
 	completed: boolean
-	createdAt: string // будем хранить ISO-дату
+	createdAt: string
 }
 
 export interface PaginatedTodos {
@@ -17,16 +17,14 @@ export interface PaginatedTodos {
 	totalPages: number
 }
 
-// Получение задачи
 export const fetchTodos = async (page: number, limit: number) => {
 	const response = await axios.get(
 		`${API_URL}/todos?page=${page}&limit=${limit}`
 	)
 	console.log(response.data)
-	return response.data // объект с data, total, page, limit, totalPages
+	return response.data
 }
 
-// Создание задачи
 export const postTodo = async (text: string): Promise<Todo> => {
 	const response = await axios.post<Todo>(`${API_URL}/todos`, {
 		text,
@@ -36,7 +34,6 @@ export const postTodo = async (text: string): Promise<Todo> => {
 	return response.data
 }
 
-// Частичное обновление задачи
 export const updateTodo = async (
 	id: number,
 	updateData: Partial<Omit<Todo, 'id' | 'createdAt'>>
@@ -45,7 +42,6 @@ export const updateTodo = async (
 	return response.data
 }
 
-// Удаление задачи
 export const deleteTodo = async (id: number): Promise<{ id: number }> => {
 	await axios.delete(`${API_URL}/todos/${id}`)
 	return { id }

@@ -1,59 +1,34 @@
-import {
-	Pagination,
-	PaginationContent,
-	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
-} from '@/components/ui/pagination'
-
-interface PaginationDemoProps {
-	page: number
-	totalPages: number
-	onChangePage: (page: number) => void
-}
+import { Pagination, PaginationContent } from '@/components/ui/pagination'
+import { PrevButton, NextButton } from './PaginationButton'
+import { PageNumbers } from './PageNumbers'
+import { type PaginationDemoProps } from '@/components/Pagination/types'
 
 export function PaginationDemo({
 	page,
 	totalPages,
 	onChangePage,
 }: PaginationDemoProps) {
+	const isFirstPage = page === 1
+	const isLastPage = page === totalPages
+
 	return (
 		<Pagination>
 			<PaginationContent>
-				<PaginationItem>
-					<PaginationPrevious
-						href='#'
-						onClick={e => {
-							e.preventDefault()
-							onChangePage(Math.max(page - 1, 1))
-						}}
-					/>
-				</PaginationItem>
+				<PrevButton
+					onClick={() => onChangePage(Math.max(page - 1, 1))}
+					disabled={isFirstPage}
+				/>
 
-				{Array.from({ length: totalPages }, (_, i) => (
-					<PaginationItem key={i}>
-						<PaginationLink
-							href='#'
-							isActive={page === i + 1}
-							onClick={e => {
-								e.preventDefault()
-								onChangePage(i + 1)
-							}}>
-							{i + 1}
-						</PaginationLink>
-					</PaginationItem>
-				))}
+				<PageNumbers
+					currentPage={page}
+					totalPages={totalPages}
+					onChangePage={onChangePage}
+				/>
 
-				<PaginationItem>
-					<PaginationNext
-						href='#'
-						onClick={e => {
-							e.preventDefault()
-							onChangePage(Math.min(page + 1, totalPages))
-						}}
-					/>
-				</PaginationItem>
+				<NextButton
+					onClick={() => onChangePage(Math.min(page + 1, totalPages))}
+					disabled={isLastPage}
+				/>
 			</PaginationContent>
 		</Pagination>
 	)
