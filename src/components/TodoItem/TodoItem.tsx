@@ -2,16 +2,9 @@ import { Trash2 } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import './TodoItem.css'
-import { DialogDemo } from './TodoItemDialog'
-import type { Todo } from '../../types/todo'
-
-// interface Todo {
-// 	id: number
-// 	text: string
-// 	completed: boolean
-// 	createdAt: Date
-// }
+import { DialogDemo } from '@/components/TodoItem/TodoItemDialog'
+import '@/components/TodoItem/TodoItem.css'
+import type { Todo } from '@/types/todo'
 
 interface ComponentNameProps {
 	todos: Todo[]

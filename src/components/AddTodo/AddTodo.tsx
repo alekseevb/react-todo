@@ -1,10 +1,10 @@
+import { useState } from 'react'
+import { Angry, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Angry, Plus } from 'lucide-react'
-import { Wrapper } from './AddTodo'
-import { useState } from 'react'
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
-import { ModeToggle } from '../Mode-toggle.tsx/mode-toggle'
+import { Wrapper } from '@/components/AddTodo/index'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { ModeToggle } from '@/components/Mode-toggle/mode-toggle'
 
 interface ComponentNameProps {
 	addTodo: (text: string) => void
