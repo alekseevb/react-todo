@@ -12,3 +12,6 @@ createRoot(document.getElementById('root')!).render(
 		</Provider>
 	</StrictMode>
 )
+
+//остановился на том, что нужно поменять вроде как axios на api
+//Из общего чек-листа остановился на 1 пункте реализовать thunks
