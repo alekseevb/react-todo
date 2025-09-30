@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Container, GlobalStyle } from '@/styles/GlobalStyle'
 import AddTodo from '@/components/AddTodo/AddTodo'
@@ -8,20 +8,11 @@ import { PaginationDemo } from '@/components/Pagination/PaginationDemo'
 import SelectOption from '@/components/Select/Select'
 import { type AppDispatch, type RootState } from '@/store/store'
 import { SkeletonDemo } from '@/components/SceletonDemo/SceletonDemo'
-import {
-	deleteTodoThunk,
-	fetchTodosThunk,
-	postTodoThunk,
-	setLimit,
-	setPage,
-	updateTodoThunk,
-} from '@/features/todos/todoSlice'
+import { deleteTodoThunk, fetchTodosThunk, postTodoThunk, setLimit, setPage, updateTodoThunk } from '@/features/todos/todoSlice'
 
 function App() {
 	const dispatch = useDispatch<AppDispatch>()
-	const { todos, page, limit, totalPages, loading, error } = useSelector(
-		(state: RootState) => state.todos
-	)
+	const { todos, page, limit, totalPages, loading, error } = useSelector((state: RootState) => state.todos)
 
 	useEffect(() => {
 		dispatch(fetchTodosThunk({ page, limit }))
@@ -54,28 +45,14 @@ function App() {
 			<Container>
 				<Box>
 					<AddTodo addTodo={addTodo} />
-					<SelectOption
-						value={limit}
-						onChange={val => dispatch(setLimit(val))}
-					/>
+					<SelectOption value={limit} onChange={val => dispatch(setLimit(val))} />
 
 					{loading && <SkeletonDemo />}
 					{error && <p className='error'>{error}</p>}
 
-					{!loading && !error && (
-						<TodoItem
-							todos={todos}
-							removeTask={handleRemoveTodoBtnClick}
-							toggleTask={handleToggleTodo}
-							editTodo={handleEditTodo}
-						/>
-					)}
+					{!loading && !error && <TodoItem todos={todos} removeTask={handleRemoveTodoBtnClick} toggleTask={handleToggleTodo} editTodo={handleEditTodo} />}
 
-					<PaginationDemo
-						page={page}
-						totalPages={totalPages}
-						onChangePage={p => dispatch(setPage(p))}
-					/>
+					<PaginationDemo page={page} totalPages={totalPages} onChangePage={p => dispatch(setPage(p))} />
 				</Box>
 			</Container>
 		</ThemeProvider>

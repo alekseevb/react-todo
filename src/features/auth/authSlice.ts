@@ -1,4 +1,3 @@
-// src/features/auth/authSlice.ts
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
 
 import api from '@/api/axios'
@@ -55,9 +54,7 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (data: { email
 export const fetchUserProfile = createAsyncThunk('auth/fetchUserProfile', async (_, { rejectWithValue }) => {
 	try {
 		const token = localStorage.getItem('accessToken')
-		const response = await api.get(`/auth/me`, {
-			headers: { Authorization: `Bearer ${token}` },
-		})
+		const response = await api.get(`/auth/me`)
 		return response.data
 	} catch (err: any) {
 		return rejectWithValue(err.response?.data?.message || 'Ошибка получения профиля')
@@ -68,9 +65,7 @@ export const fetchUserProfile = createAsyncThunk('auth/fetchUserProfile', async 
 export const changePassword = createAsyncThunk('auth/changePassword', async (data: { oldPassword: string; newPassword: string }, { rejectWithValue }) => {
 	try {
 		const token = localStorage.getItem('accessToken')
-		const response = await api.post(`/auth/change-password`, data, {
-			headers: { Authorization: `Bearer ${token}` },
-		})
+		const response = await api.post(`/auth/change-password`)
 		return response.data
 	} catch (err: any) {
 		return rejectWithValue(err.response?.data?.message || 'Ошибка смены пароля')
