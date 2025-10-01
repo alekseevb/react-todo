@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '@/store/store'
 import { logoutUser } from '@/features/auth/authSlice'
+import ProfilePage from './ProfilePage'
 
 function Navbar() {
 	const dispatch = useDispatch<AppDispatch>()
@@ -28,7 +29,10 @@ function Navbar() {
 			) : (
 				<>
 					<span className={cn('mr-2')}>👋 {user?.email || 'User'}</span>
-					<button onClick={() => dispatch(logoutUser())}>Logout</button>
+					<button onClick={() => dispatch(logoutUser())} className={cn('mr-5')}>
+						Logout
+					</button>
+					<ProfilePage />
 				</>
 			)}
 		</nav>

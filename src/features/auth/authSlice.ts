@@ -1,8 +1,4 @@
-import {
-	createSlice,
-	createAsyncThunk,
-	type PayloadAction,
-} from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
 
 import api from '@/api/axios'
 
@@ -29,82 +25,64 @@ const initialState: AuthState = {
 // 🟢 Thunks
 
 // Регистрация
-export const registerUser = createAsyncThunk(
-	'auth/registerUser',
-	async (
-		data: { email: string; password: string; age?: number },
-		{ rejectWithValue }
-	) => {
-		try {
-			const response = await api.post(`/auth/register`, data)
-			const { accessToken, refreshToken, user } = response.data as {
-				accessToken: string
-				refreshToken: string
-				user: { id: number; email: string; age?: number }
-			}
-
-			localStorage.setItem('accessToken', accessToken)
-			localStorage.setItem('refreshToken', refreshToken)
-
-			return { user, accessToken }
-		} catch (err: any) {
-			return rejectWithValue(
-				err.response?.data?.message || 'Ошибка регистрации'
-			)
+export const registerUser = createAsyncThunk('auth/registerUser', async (data: { email: string; password: string; age?: number }, { rejectWithValue }) => {
+	try {
+		const response = await api.post(`/auth/register`, data)
+		const { accessToken, refreshToken, user } = response.data as {
+			accessToken: string
+			refreshToken: string
+			user: { id: number; email: string; age?: number }
 		}
+
+		localStorage.setItem('accessToken', accessToken)
+		localStorage.setItem('refreshToken', refreshToken)
+
+		return { user, accessToken }
+	} catch (err: any) {
+		return rejectWithValue(err.response?.data?.message || 'Ошибка регистрации')
 	}
-)
+})
 
 // Логин
-export const loginUser = createAsyncThunk(
-	'auth/loginUser',
-	async (data: { email: string; password: string }, { rejectWithValue }) => {
-		try {
-			const response = await api.post(`/auth/login`, data)
-			const { accessToken, refreshToken } = response.data
-			localStorage.setItem('accessToken', accessToken)
-			localStorage.setItem('refreshToken', refreshToken)
-			return response.data.user
-		} catch (err: any) {
-			return rejectWithValue(err.response?.data?.message || 'Ошибка логина')
-		}
+export const loginUser = createAsyncThunk('auth/loginUser', async (data: { email: string; password: string }, { rejectWithValue }) => {
+	try {
+		const response = await api.post(`/auth/login`, data)
+		const { accessToken, refreshToken } = response.data
+		localStorage.setItem('accessToken', accessToken)
+		localStorage.setItem('refreshToken', refreshToken)
+		return response.data.user
+	} catch (err: any) {
+		return rejectWithValue(err.response?.data?.message || 'Ошибка логина')
 	}
-)
+})
 
 // Получение профиля
-export const fetchUserProfile = createAsyncThunk(
-	'auth/fetchUserProfile',
-	async (_, { rejectWithValue }) => {
-		try {
-			const token = localStorage.getItem('accessToken')
-			const response = await api.get(`/auth/me`)
-			return response.data
-		} catch (err: any) {
-			return rejectWithValue(
-				err.response?.data?.message || 'Ошибка получения профиля'
-			)
-		}
+export const fetchUserProfile = createAsyncThunk('auth/fetchUserProfile', async (_, { rejectWithValue }) => {
+	try {
+		const token = localStorage.getItem('accessToken')
+		const response = await api.get(`/auth/me`)
+		return response.data
+	} catch (err: any) {
+		return rejectWithValue(err.response?.data?.message || 'Ошибка получения профиля')
 	}
-)
+})
 
 // Смена пароля
-export const changePassword = createAsyncThunk(
-	'auth/changePassword',
-	async (
-		data: { oldPassword: string; newPassword: string },
-		{ rejectWithValue }
-	) => {
-		try {
-			const token = localStorage.getItem('accessToken')
-			const response = await api.post(`/auth/change-password`)
-			return response.data
-		} catch (err: any) {
-			return rejectWithValue(
-				err.response?.data?.message || 'Ошибка смены пароля'
-			)
-		}
+export const changePassword = createAsyncThunk('auth/changePassword', async (data: { oldPassword: string; newPassword: string }, { rejectWithValue }) => {
+	try {
+		const token = localStorage.getItem('accessToken')
+		const response = await api.post(
+			`/auth/change-password`,
+			data, // <-- передаём старый и новый пароль
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		)
+		return response.data // например { message: "Пароль изменён" }
+	} catch (err: any) {
+		return rejectWithValue(err.response?.data?.message || 'Ошибка смены пароля')
 	}
-)
+})
 
 // Logout
 export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
@@ -124,15 +102,12 @@ const authSlice = createSlice({
 				state.status = 'loading'
 				state.error = null
 			})
-			.addCase(
-				registerUser.fulfilled,
-				(state, action: PayloadAction<{ accessToken: string; user: User }>) => {
-					state.status = 'idle'
-					state.user = action.payload.user
-					state.token = action.payload.accessToken // берем токен из payload
-					localStorage.setItem('accessToken', action.payload.accessToken)
-				}
-			)
+			.addCase(registerUser.fulfilled, (state, action: PayloadAction<{ accessToken: string; user: User }>) => {
+				state.status = 'idle'
+				state.user = action.payload.user
+				state.token = action.payload.accessToken // берем токен из payload
+				localStorage.setItem('accessToken', action.payload.accessToken)
+			})
 			.addCase(registerUser.rejected, (state, action) => {
 				state.status = 'failed'
 				state.error = action.payload as string
@@ -156,13 +131,10 @@ const authSlice = createSlice({
 				state.status = 'loading'
 				state.error = null
 			})
-			.addCase(
-				fetchUserProfile.fulfilled,
-				(state, action: PayloadAction<User>) => {
-					state.status = 'idle'
-					state.user = action.payload
-				}
-			)
+			.addCase(fetchUserProfile.fulfilled, (state, action: PayloadAction<User>) => {
+				state.status = 'idle'
+				state.user = action.payload
+			})
 			.addCase(fetchUserProfile.rejected, (state, action) => {
 				state.status = 'failed'
 				state.error = action.payload as string
