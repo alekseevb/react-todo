@@ -3,7 +3,7 @@ import { type Todo } from '@/types/todo'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
-// получить все задачи
+// ✅ GET todos (с токеном)
 export const fetchTodos = async (page: number, limit: number) => {
 	const token = localStorage.getItem('accessToken')
 	if (!token) throw new Error('Нет токена авторизации')
@@ -16,7 +16,7 @@ export const fetchTodos = async (page: number, limit: number) => {
 	return response.data
 }
 
-// добавить задачу
+// ✅ POST todo (с токеном)
 export const postTodo = async (text: string): Promise<Todo> => {
 	const token = localStorage.getItem('accessToken')
 	if (!token) throw new Error('Нет токена авторизации')
@@ -37,7 +37,7 @@ export const postTodo = async (text: string): Promise<Todo> => {
 	return response.data
 }
 
-// обновить задачу
+// ✅ PUT todo (с токеном)
 export const updateTodo = async (id: number, updateData: Partial<Omit<Todo, 'id' | 'createdAt'>>): Promise<Todo> => {
 	const token = localStorage.getItem('accessToken')
 	if (!token) throw new Error('Нет токена авторизации')
@@ -50,7 +50,7 @@ export const updateTodo = async (id: number, updateData: Partial<Omit<Todo, 'id'
 	return response.data
 }
 
-// удалить задачу
+// ✅ DELETE todo (с токеном)
 export const deleteTodo = async (id: number): Promise<{ id: number }> => {
 	const token = localStorage.getItem('accessToken')
 	if (!token) throw new Error('Нет токена авторизации')
