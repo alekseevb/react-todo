@@ -1,83 +1,40 @@
-import { useEffect, useState } from 'react'
+import { HomePage, LoginForm, Navbar, RegisterForm } from '@/pages'
+import { ThemeProvider, ProtectedRoute } from '@/components'
+import { GlobalStyle } from '@/styles/GlobalStyle'
+import type { AppDispatch, RootState } from '@/store/store'
+import { fetchUserProfile } from '@/features/authSlice'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Container, GlobalStyle } from '@/styles/GlobalStyle'
-import AddTodo from '@/components/AddTodo/AddTodo'
-import TodoItem from '@/components/TodoItem/TodoItem'
-import { ThemeProvider } from '@/components/Theme-provider/Theme-provider'
-import { PaginationDemo } from '@/components/Pagination/PaginationDemo'
-import SelectOption from '@/components/Select/Select'
-import { type AppDispatch, type RootState } from '@/store/store'
-import { SkeletonDemo } from '@/components/SceletonDemo/SceletonDemo'
-import {
-	deleteTodoThunk,
-	fetchTodosThunk,
-	postTodoThunk,
-	setLimit,
-	setPage,
-	updateTodoThunk,
-} from '@/features/todos/todoSlice'
 
 function App() {
 	const dispatch = useDispatch<AppDispatch>()
-	const { todos, page, limit, totalPages, loading, error } = useSelector(
-		(state: RootState) => state.todos
-	)
+	const { token } = useSelector((state: RootState) => state.auth)
 
 	useEffect(() => {
-		dispatch(fetchTodosThunk({ page, limit }))
-	}, [page, limit, dispatch])
-
-	const addTodo = (inputValue: string) => {
-		if (!inputValue.trim()) return
-		dispatch(postTodoThunk(inputValue))
-	}
-
-	const handleRemoveTodoBtnClick = (id: number) => {
-		dispatch(deleteTodoThunk(id))
-	}
-
-	const handleToggleTodo = (id: number) => {
-		const todo = todos.find(t => t.id === id)
-		if (!todo) return
-		dispatch(updateTodoThunk({ id, data: { completed: !todo.completed } }))
-	}
-
-	const handleEditTodo = (id: number, newText: string) => {
-		dispatch(updateTodoThunk({ id, data: { text: newText } }))
-	}
-
-	console.log(JSON.stringify(todos, null, 2))
+		if (token) {
+			dispatch(fetchUserProfile())
+		}
+	}, [token, dispatch])
 
 	return (
 		<ThemeProvider>
 			<GlobalStyle />
-			<Container>
-				<Box>
-					<AddTodo addTodo={addTodo} />
-					<SelectOption
-						value={limit}
-						onChange={val => dispatch(setLimit(val))}
+			<BrowserRouter>
+				<Navbar />
+				<Routes>
+					<Route path='/login' element={<LoginForm />} />
+					<Route path='/register' element={<RegisterForm />} />
+					<Route
+						path='/'
+						element={
+							<ProtectedRoute>
+								<HomePage />
+							</ProtectedRoute>
+						}
 					/>
-
-					{loading && <SkeletonDemo />}
-					{error && <p className='error'>{error}</p>}
-
-					{!loading && !error && (
-						<TodoItem
-							todos={todos}
-							removeTask={handleRemoveTodoBtnClick}
-							toggleTask={handleToggleTodo}
-							editTodo={handleEditTodo}
-						/>
-					)}
-
-					<PaginationDemo
-						page={page}
-						totalPages={totalPages}
-						onChangePage={p => dispatch(setPage(p))}
-					/>
-				</Box>
-			</Container>
+				</Routes>
+			</BrowserRouter>
 		</ThemeProvider>
 	)
 }

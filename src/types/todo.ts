@@ -4,3 +4,11 @@ export interface Todo {
 	completed: boolean
 	createdAt: string // или Date
 }
+
+export interface PaginatedTodos {
+	items: Todo[]
+	total: number
+	page: number
+	limit: number
+	totalPages: number
+}
