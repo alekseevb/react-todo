@@ -1,11 +1,5 @@
 import { Button } from '@/components/ui/button'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useForm } from 'react-hook-form'
@@ -17,7 +11,6 @@ import { type RootState, type AppDispatch } from '@/store/store'
 import { Link, useNavigate } from 'react-router-dom'
 import { Container } from '@/styles/GlobalStyle'
 
-// схема валидации
 const registerSchema = z.object({
 	email: z.string().email({ message: 'Неверный email' }),
 	password: z.string().min(6, 'Пароль минимум 6 символов'),
@@ -44,11 +37,10 @@ export function RegisterForm() {
 			registerUser({
 				email: data.email,
 				password: data.password,
-				age: data.age, // если есть
+				age: data.age,
 			})
 		)
 		if (registerUser.fulfilled.match(result)) {
-			// успешная регистрация → редирект на login
 			navigate('/login')
 			console.log('Тут должен быть редирект')
 		}
@@ -59,58 +51,32 @@ export function RegisterForm() {
 			<Card className='w-full max-w-sm'>
 				<CardHeader>
 					<CardTitle>Create an account</CardTitle>
-					<CardDescription>
-						Enter your email below to create a new account
-					</CardDescription>
+					<CardDescription>Enter your email below to create a new account</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className='flex flex-col gap-6'>
 							<div className='grid gap-2'>
 								<Label htmlFor='email'>Email</Label>
-								<Input
-									id='email'
-									type='email'
-									placeholder='m@example.com'
-									{...register('email')}
-								/>
-								{errors.email && (
-									<p className='text-red-500 text-sm'>{errors.email.message}</p>
-								)}
+								<Input id='email' type='email' placeholder='m@example.com' {...register('email')} />
+								{errors.email && <p className='text-red-500 text-sm'>{errors.email.message}</p>}
 							</div>
 
 							<div className='grid gap-2'>
 								<Label htmlFor='age'>Age</Label>
-								<Input
-									id='age'
-									type='number'
-									{...register('age', { valueAsNumber: true })}
-								/>
-								{errors.age && (
-									<p className='text-red-500 text-sm'>{errors.age.message}</p>
-								)}
+								<Input id='age' type='number' {...register('age', { valueAsNumber: true })} />
+								{errors.age && <p className='text-red-500 text-sm'>{errors.age.message}</p>}
 							</div>
 
 							<div className='grid gap-2'>
 								<Label htmlFor='password'>Password</Label>
-								<Input
-									id='password'
-									type='password'
-									{...register('password')}
-								/>
-								{errors.password && (
-									<p className='text-red-500 text-sm'>
-										{errors.password.message}
-									</p>
-								)}
+								<Input id='password' type='password' {...register('password')} />
+								{errors.password && <p className='text-red-500 text-sm'>{errors.password.message}</p>}
 							</div>
 
 							{error && <p className='text-red-500 text-sm'>{error}</p>}
 						</div>
-						<Button
-							type='submit'
-							className='w-full mt-4'
-							disabled={status === 'loading'}>
+						<Button type='submit' className='w-full mt-4' disabled={status === 'loading'}>
 							{status === 'loading' ? 'Registering...' : 'Sign up'}
 						</Button>
 						<div className='mt-4 text-center text-sm'>

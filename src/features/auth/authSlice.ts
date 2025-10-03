@@ -22,9 +22,6 @@ const initialState: AuthState = {
 	error: null,
 }
 
-// 🟢 Thunks
-
-// Регистрация
 export const registerUser = createAsyncThunk('auth/registerUser', async (data: { email: string; password: string; age?: number }, { rejectWithValue }) => {
 	try {
 		const response = await api.post(`/auth/register`, data)
@@ -43,7 +40,6 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (data: {
 	}
 })
 
-// Логин
 export const loginUser = createAsyncThunk('auth/loginUser', async (data: { email: string; password: string }, { rejectWithValue }) => {
 	try {
 		const response = await api.post(`/auth/login`, data)
@@ -56,7 +52,6 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (data: { email
 	}
 })
 
-// Получение профиля
 export const fetchUserProfile = createAsyncThunk('auth/fetchUserProfile', async (_, { rejectWithValue }) => {
 	try {
 		const token = localStorage.getItem('accessToken')
@@ -67,30 +62,23 @@ export const fetchUserProfile = createAsyncThunk('auth/fetchUserProfile', async 
 	}
 })
 
-// Смена пароля
 export const changePassword = createAsyncThunk('auth/changePassword', async (data: { oldPassword: string; newPassword: string }, { rejectWithValue }) => {
 	try {
 		const token = localStorage.getItem('accessToken')
-		const response = await api.post(
-			`/auth/change-password`,
-			data, // <-- передаём старый и новый пароль
-			{
-				headers: { Authorization: `Bearer ${token}` },
-			}
-		)
-		return response.data // например { message: "Пароль изменён" }
+		const response = await api.post(`/auth/change-password`, data, {
+			headers: { Authorization: `Bearer ${token}` },
+		})
+		return response.data
 	} catch (err: any) {
 		return rejectWithValue(err.response?.data?.message || 'Ошибка смены пароля')
 	}
 })
 
-// Logout
 export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
 	localStorage.removeItem('accessToken')
 	localStorage.removeItem('refreshToken')
 })
 
-// 🔹 Slice
 const authSlice = createSlice({
 	name: 'auth',
 	initialState,
@@ -105,7 +93,7 @@ const authSlice = createSlice({
 			.addCase(registerUser.fulfilled, (state, action: PayloadAction<{ accessToken: string; user: User }>) => {
 				state.status = 'idle'
 				state.user = action.payload.user
-				state.token = action.payload.accessToken // берем токен из payload
+				state.token = action.payload.accessToken
 				localStorage.setItem('accessToken', action.payload.accessToken)
 			})
 			.addCase(registerUser.rejected, (state, action) => {

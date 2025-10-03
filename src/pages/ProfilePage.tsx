@@ -40,8 +40,6 @@ export default function ProfilePage() {
 					<DialogTitle>Профиль</DialogTitle>
 					<DialogDescription>Здесь можно изменить пароль. Email изменить нельзя.</DialogDescription>
 				</DialogHeader>
-
-				{/* форма внутри контента */}
 				<form onSubmit={handleSubmit} className='grid gap-4'>
 					<div className='grid gap-3'>
 						<Label htmlFor='email'>Email</Label>
