@@ -1,15 +1,15 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Container } from '@/styles/GlobalStyle'
+import { loginUser } from '@/features/authSlice'
+import { type RootState, type AppDispatch } from '@/store/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from '@/features/auth/authSlice'
-import { type RootState, type AppDispatch } from '@/store/store'
-import { Link, useNavigate } from 'react-router-dom'
-import { Container } from '@/styles/GlobalStyle'
 
 const loginSchema = z.object({
 	email: z.string().email({ message: 'Неверный email' }),

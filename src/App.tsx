@@ -1,15 +1,11 @@
-import { ThemeProvider } from '@/components/Theme-provider/Theme-provider'
+import { HomePage, LoginForm, Navbar, RegisterForm } from '@/pages'
+import { ThemeProvider, ProtectedRoute } from '@/components'
 import { GlobalStyle } from '@/styles/GlobalStyle'
+import type { AppDispatch, RootState } from '@/store/store'
+import { fetchUserProfile } from '@/features/authSlice'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import HomePage from '@/pages/HomePage'
-import LoginForm from '@/pages/LoginForm'
-import RegisterForm from '@/pages/RegisterForm'
-import Navbar from './pages/Navbar'
-import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import type { AppDispatch, RootState } from './store/store'
-import { fetchUserProfile } from './features/auth/authSlice'
 
 function App() {
 	const dispatch = useDispatch<AppDispatch>()

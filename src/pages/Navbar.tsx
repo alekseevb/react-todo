@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom'
-import { cn } from '@/lib/utils'
-import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '@/store/store'
-import { logoutUser } from '@/features/auth/authSlice'
+import { logoutUser } from '@/features/authSlice'
+import { cn } from '@/lib/utils'
 import ProfilePage from './ProfilePage'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 function Navbar() {
 	const dispatch = useDispatch<AppDispatch>()

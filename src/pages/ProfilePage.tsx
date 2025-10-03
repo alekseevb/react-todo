@@ -2,10 +2,10 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useDispatch, useSelector } from 'react-redux'
+import { changePassword } from '@/features/authSlice'
 import type { AppDispatch, RootState } from '@/store/store'
 import { useState } from 'react'
-import { changePassword } from '@/features/auth/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function ProfilePage() {
 	const { user } = useSelector((state: RootState) => state.auth)
